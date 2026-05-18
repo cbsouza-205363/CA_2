@@ -166,7 +166,6 @@ public class CA_2 {
                                 System.out.println("Manager Type: " + emp.managerType);
                                 System.out.println("Department: " + emp.department);
                                 break;
-
                             }
                         }
                     } else {
@@ -236,7 +235,7 @@ public class CA_2 {
 
                     while (!sc.hasNextInt()) {
                         System.out.println("Invalid option.Please enter a number from 0 to 3.");
-
+                        sc.nextLine();
                     }
 
                     departmentChoice = sc.nextInt();
