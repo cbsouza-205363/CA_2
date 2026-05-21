@@ -9,8 +9,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 /**
- * Employee Organization System for a Bank
- * Allows sorting, searching, adding employee and creating a binary tree.
+ * Employee Organization System for a Bank Allows sorting, searching, adding
+ * employee and creating a binary tree.
+ *
  * @author Camila
  */
 public class CA_2 {
@@ -54,7 +55,7 @@ public class CA_2 {
             System.out.println("3. Add Employee");
             System.out.println("4. Create Binary Tree");
             System.out.println("5. Exit");
-            
+
             System.out.println("Select an option:");
 
             //Validate menu input
@@ -74,6 +75,7 @@ public class CA_2 {
                     File file = new File(fileName);
                     Scanner fileReader = new Scanner(file);
                     ArrayList<String> names = new ArrayList<>();
+                    ArrayList<Employee> employeeList = new ArrayList<>();
 
                     //Skip CSV header line
                     fileReader.nextLine(); // skip header
@@ -92,9 +94,15 @@ public class CA_2 {
                             continue;
                         }
 
-                        //Combine first and Last name
+                        //Combine e
                         String fullName = data[0] + " " + data[1];
+                        String department = data[5];
+                        String managerType = data[7];
+
                         names.add(fullName);
+
+                        Employee employee = new Employee(fullName, managerType, department);
+                        employeeList.add(employee);
                     }
 
                     fileReader.close();
@@ -104,17 +112,25 @@ public class CA_2 {
 
                     System.out.println("File loaded successfully!");
                     System.out.println("\nFirst 20 sorted employee names:");
+                    System.out.println("------------------------------------------------------------------");
+                    System.out.printf("%-18s %-30s %-20s%n", "Name", "Manager Type", "Department");
+                    System.out.println("------------------------------------------------------------------");
 
                     int limit = Math.min(20, names.size());
 
                     for (int i = 0; i < limit; i++) {
-                        System.out.println(names.get(i));
+                        for (Employee emp : employeeList) {
+                            if (emp.name.equalsIgnoreCase(names.get(i))) {
+                                System.out.printf("%-18s %-30s %-20s%n", emp.name, emp.managerType, emp.department);
+                            }
+                        }
                     }
 
                 } catch (FileNotFoundException e) {
                     System.out.println("File not found.");
                 }
-            //Option 2: Search employee information
+
+                //Option 2: Search employee information
             } else if (choice == MenuOption.SEARCH.getValue()) {
                 System.out.println("Enter name to search:");
                 String target = sc.nextLine();
@@ -151,7 +167,6 @@ public class CA_2 {
                         searchEmployees.add(employee);
                     }
                     fileReader.close();
-
                     MergeSort.mergeSort(names);
 
                     //Search using recursive Binary Search
@@ -174,8 +189,8 @@ public class CA_2 {
                 } catch (FileNotFoundException e) {
                     System.out.println("File not found.");
                 }
-            
-            //Option 3: Add new employee
+
+                //Option 3: Add new employee
             } else if (choice == MenuOption.ADD_RECORD.getValue()) {
                 System.out.println("Enter employee name:");
                 String name = sc.nextLine();
@@ -270,17 +285,18 @@ public class CA_2 {
                 Employee newEmployee = new Employee(name, managerType, departmentName);
                 employees.add(newEmployee);
 
-                System.out.println(name + " has been added as " +managerType+ " to " +departmentName+" successfully!");
+                System.out.println(name + " has been added as " + managerType + " to " + departmentName + " successfully!");
 
                 System.out.println("\nEmployees added:");
                 for (Employee emp : employees) {
                     System.out.println(emp.name + " - " + emp.managerType + " - " + emp.department);
 
                 }
-                
-            //Option 4: Create Binary Tree
+
+                //Option 4: Create Binary Tree
             } else if (choice == MenuOption.CREATE_BINARY_TREE.getValue()) {
                 BinaryTree tree = new BinaryTree();
+                ArrayList<Employee> treeEmployees = new ArrayList<>();
 
                 try {
                     File file = new File(fileName);
@@ -302,14 +318,20 @@ public class CA_2 {
                         String department = data[5];
                         String managerType = data[7];
 
-                        Employee employee = new Employee(fullName, managerType, department);
+                        Employee employee = new Employee(fullName, 
+                                                            managerType,
+                                                     department);
 
                         //Insert employee using level-order insertion
-                        tree.insert(employee);
+                        treeEmployees.add(employee);
                         count++;
 
                     }
                     fileReader.close();
+                    treeEmployees.sort((e1,e2) -> Integer.compare(getRolePriority(e1.managerType), getRolePriority(e2.managerType)));
+                    for(Employee emp: treeEmployees){
+                        tree.insert(emp);
+                    }
                     System.out.println("Binary Tree created successfully!");
 
                     System.out.println("\nEmployee Hierarchy: ");
@@ -323,17 +345,32 @@ public class CA_2 {
                     System.out.println("File not found.");
 
                 }
-                
-            //Option 5: Exit program
+
+                //Option 5: Exit program
             } else if (choice == MenuOption.EXIT.getValue()) {
                 System.out.println("Program closed.");
-                    
-              //Display message for invalid menu options  
+
+                //Display message for invalid menu options  
             } else {
                 System.out.println("Invalid option. Please enter a number from 1 to 5.");
             }
 
         }
+ 
     }
+    //Definr priority for employee roles in hierarchy
+    public static int getRolePriority(String managerType) {
+        if (managerType.equalsIgnoreCase("Head Manager") || managerType.equalsIgnoreCase("Senior Manager")) {
+            return 1;
 
+        } else if (managerType.equalsIgnoreCase("Manager")) {
+            return 2;
+        } else if (managerType.equalsIgnoreCase("Assistant Manager")) {
+            return 3;
+        } else if (managerType.equalsIgnoreCase("Team Lead")) {
+            return 4;
+        } else{
+            return 5;
+        }
+    }
 }
