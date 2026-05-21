@@ -8,8 +8,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * BinaryTree class used to create the employee hierarchy
- * Each node stores employee information: Name, Manager Type and Department.
+ * BinaryTree class used to create the employee hierarchy Each node stores
+ * employee information: Name, Manager Type and Department.
+ *
  * @author Camila
  */
 public class BinaryTree {
@@ -62,24 +63,30 @@ public class BinaryTree {
         }
         Queue<Node> queue = new LinkedList<>();
         queue.add(root);
+        int level = 1;
 
         while (!queue.isEmpty()) {
-            Node current = queue.poll();
+            int size = queue.size();
 
-            System.out.println(current.employee.name + " - " + current.employee.managerType + " - " + current.employee.department);
+            System.out.println("\nLevel " + level);
+            for (int i = 0; i < size; i++) {
+                Node current = queue.poll();
 
-            //Add left child to queue
-            if (current.left != null) {
-                queue.add(current.left);
+                System.out.println(current.employee.name + " - " + current.employee.managerType + " - " + current.employee.department);
+
+                //Add left child to queue
+                if (current.left != null) {
+                    queue.add(current.left);
+                }
+                //Add right child to queue
+                if (current.right != null) {
+                    queue.add(current.right);
+                }
             }
-            //Add right child to queue
-            if (current.right != null) {
-                queue.add(current.right);
-            }
+            level ++;
         }
     }
-
-    //Count total number of nodes
+        //Count total number of nodes
     public int countNodes(Node node) {
         if (node == null) {
             return 0;
