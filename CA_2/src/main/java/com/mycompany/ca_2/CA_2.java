@@ -94,7 +94,7 @@ public class CA_2 {
                             continue;
                         }
 
-                        //Combine e
+                        //Combine Name, department and managerType
                         String fullName = data[0] + " " + data[1];
                         String department = data[5];
                         String managerType = data[7];
@@ -111,7 +111,8 @@ public class CA_2 {
                     MergeSort.mergeSort(names);
 
                     System.out.println("File loaded successfully!");
-                    System.out.println("\nFirst 20 sorted employee names:");
+
+                    System.out.println("First 20 sorted employee names:");
                     System.out.println("------------------------------------------------------------------");
                     System.out.printf("%-18s %-30s %-20s%n", "Name", "Manager Type", "Department");
                     System.out.println("------------------------------------------------------------------");
@@ -318,9 +319,7 @@ public class CA_2 {
                         String department = data[5];
                         String managerType = data[7];
 
-                        Employee employee = new Employee(fullName, 
-                                                            managerType,
-                                                     department);
+                        Employee employee = new Employee(fullName, managerType, department);
 
                         //Insert employee using level-order insertion
                         treeEmployees.add(employee);
@@ -328,13 +327,13 @@ public class CA_2 {
 
                     }
                     fileReader.close();
-                    treeEmployees.sort((e1,e2) -> Integer.compare(getRolePriority(e1.managerType), getRolePriority(e2.managerType)));
-                    for(Employee emp: treeEmployees){
+                    treeEmployees.sort((e1, e2) -> Integer.compare(getRolePriority(e1.managerType), getRolePriority(e2.managerType)));
+                    for (Employee emp : treeEmployees) {
                         tree.insert(emp);
                     }
                     System.out.println("Binary Tree created successfully!");
 
-                    System.out.println("\nEmployee Hierarchy: ");
+                    System.out.println("Employee Hierarchy: ");
                     tree.display();
 
                     //Display hierarchy information
@@ -356,8 +355,9 @@ public class CA_2 {
             }
 
         }
- 
+
     }
+
     //Definr priority for employee roles in hierarchy
     public static int getRolePriority(String managerType) {
         if (managerType.equalsIgnoreCase("Head Manager") || managerType.equalsIgnoreCase("Senior Manager")) {
@@ -369,7 +369,7 @@ public class CA_2 {
             return 3;
         } else if (managerType.equalsIgnoreCase("Team Lead")) {
             return 4;
-        } else{
+        } else {
             return 5;
         }
     }
